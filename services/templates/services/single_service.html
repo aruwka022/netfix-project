@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load service_extras %}
+{% block title %}{{ service.name }}{% endblock %}
+
+{% block content %}
+  <div class="service-detail">
+    <div class="service-detail-banner field-{{ service.field|field_slug }}">
+      <span class="service-detail-icon">{{ service.field|field_icon }}</span>
+    </div>
+
+    <div class="service-detail-body">
+      <div class="service-detail-top">
+        <span class="pill pill-{{ service.field|field_slug }}">{{ service.field }}</span>
+        {% if is_owner %}
+          <div class="owner-actions">
+            <a class="btn btn-ghost btn-sm" href="{% url 'edit_service' service.id %}">Edit</a>
+            <a class="btn btn-ghost btn-sm btn-danger" href="{% url 'delete_service' service.id %}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+      <h1>{{ service.name }}</h1>
+      <p class="service-detail-company">
+        by <a href="{% url 'company_profile' service.company.user.username %}">{{ service.company.user.username }}</a>
+        {% if service.rating %}
+          <span class="stars-readonly" title="{{ service.rating }}/5">{{ service.rating|stars }}</span>
+        {% endif %}
+      </p>
+      <p class="service-detail-price">€{{ service.price_hour }}<span>/hour</span></p>
+
+      <p class="service-detail-description">{{ service.description }}</p>
+
+      <p class="service-detail-meta">Listed on {{ service.date|date:"N j, Y" }}</p>
+
+      {% if request.user.is_authenticated and request.user.is_customer %}
+        <a href="{% url 'request_service' service.id %}" class="btn btn-primary btn-lg">Request this service</a>
+      {% elif not request.user.is_authenticated %}
+        <a href="{% url 'login_user' %}?next={% url 'request_service' service.id %}" class="btn btn-primary btn-lg">Log in to request</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

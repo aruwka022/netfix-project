@@ -1,0 +1,40 @@
+{% load service_extras %}
+{% if page_obj %}
+  <div class="card-grid">
+    {% for service in page_obj %}
+      <a class="service-card" href="{% url 'index' service.id %}">
+        <div class="service-card-banner field-{{ service.field|field_slug }}">
+          <span class="service-card-icon">{{ service.field|field_icon }}</span>
+        </div>
+        <div class="service-card-body">
+          <span class="pill pill-{{ service.field|field_slug }}">{{ service.field }}</span>
+          <h3>{{ service.name }}</h3>
+          <p class="service-card-company">by {{ service.company.user.username }}</p>
+          <p class="service-card-price">€{{ service.price_hour }}<span>/hour</span></p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?{% if extra_qs %}{{ extra_qs }}&{% endif %}page={{ page_obj.previous_page_number }}">← Prev</a>
+      {% endif %}
+      <span class="pagination-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?{% if extra_qs %}{{ extra_qs }}&{% endif %}page={{ page_obj.next_page_number }}">Next →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="empty-state">
+    <span class="empty-state-icon">🔍</span>
+    {% if q %}
+      <p>No services match "{{ q }}". Try a different search.</p>
+    {% else %}
+      <p>No services available yet. Check back soon, or browse another category.</p>
+    {% endif %}
+    <a class="btn btn-primary" href="{% url 'services_list' %}">See all services</a>
+  </div>
+{% endif %}

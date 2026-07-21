@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% load service_extras %}
+{% block title %}{{ field }} Services{% endblock %}
+
+{% block content %}
+  <div class="section-header">
+    <h1 class="page-title">{{ field|field_icon }} {{ field }} Services</h1>
+  </div>
+  <p class="page-subtitle">All {{ field }} companies currently offering services on NetFix.</p>
+
+  {% include 'services/_search_sort_bar.html' with q=q sort=sort %}
+
+  {% include 'services/_service_grid.html' with page_obj=page_obj extra_qs=extra_qs q=q %}
+{% endblock %}

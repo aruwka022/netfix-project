@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% block title %}Company Sign Up{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <h1 class="page-title">🏢 Register as a Company</h1>
+    <p class="page-subtitle">Choose the field your company works in — this decides what services you can create.</p>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% include 'main/_form_fields.html' %}
+      <button type="submit" name="register" class="btn btn-primary btn-lg btn-block">Create Account</button>
+    </form>
+    <p class="page-subtitle">Already have an account? <a href="{% url 'login_user' %}">Log in</a></p>
+  </div>
+{% endblock %}

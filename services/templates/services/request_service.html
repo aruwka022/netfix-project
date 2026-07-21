@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+{% load service_extras %}
+{% block title %}Request {{ service.name }}{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <h1 class="page-title">Request Service</h1>
+    <div class="request-summary">
+      <span class="service-card-icon">{{ service.field|field_icon }}</span>
+      <div>
+        <h3>{{ service.name }}</h3>
+        <p class="service-card-company">by {{ service.company.user.username }} · €{{ service.price_hour }}/hour</p>
+      </div>
+    </div>
+
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% include 'main/_form_fields.html' %}
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Confirm Request</button>
+    </form>
+  </div>
+{% endblock %}

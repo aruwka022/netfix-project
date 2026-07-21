@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <h1 class="page-title">Welcome back</h1>
+    <p class="page-subtitle">Log in to book services or manage your listings.</p>
+
+    {% if error %}
+      <div class="form-group has-error">
+        <span class="error_message">Invalid email or password. Please try again.</span>
+      </div>
+    {% endif %}
+
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+      {% endif %}
+      {% include 'main/_form_fields.html' %}
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
+    </form>
+    <p class="page-subtitle">New to NetFix? <a href="{% url 'register' %}">Sign up</a></p>
+  </div>
+{% endblock %}

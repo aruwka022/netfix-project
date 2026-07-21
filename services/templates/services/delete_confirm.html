@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% block title %}Delete {{ service.name }}{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <h1 class="page-title">Delete Service?</h1>
+    <p class="page-subtitle">
+      This will permanently remove "<strong>{{ service.name }}</strong>" and cannot be undone.
+    </p>
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger btn-lg btn-block">Yes, delete this service</button>
+    </form>
+    <p class="page-subtitle"><a href="{% url 'index' service.id %}">Cancel and go back</a></p>
+  </div>
+{% endblock %}

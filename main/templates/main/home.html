@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+{% load service_extras %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div class="hero-text">
+      <span class="hero-kicker">🧰 Home services, on demand</span>
+      <h1>Any job around the house, <span class="accent">sorted</span>.</h1>
+      <p>From leaky taps to full-on interior makeovers — book trusted local
+        companies for any home service, in a couple of clicks.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'services_list' %}">Browse services</a>
+        <a class="btn btn-outline-light btn-lg" href="{% url 'register' %}">Offer your services</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-header">
+      <h2>🔥 Most requested services</h2>
+      <a class="section-link" href="{% url 'services_list' %}">See all services →</a>
+    </div>
+
+    {% if services %}
+      <div class="card-grid">
+        {% for service in services %}
+          <a class="service-card" href="{% url 'index' service.id %}">
+            <div class="service-card-banner field-{{ service.field|field_slug }}">
+              <span class="service-card-icon">{{ service.field|field_icon }}</span>
+              {% if service.num_requests %}
+                <span class="badge-requests">{{ service.num_requests }} booking{{ service.num_requests|pluralize }}</span>
+              {% endif %}
+            </div>
+            <div class="service-card-body">
+              <span class="pill pill-{{ service.field|field_slug }}">{{ service.field }}</span>
+              <h3>{{ service.name }}</h3>
+              <p class="service-card-company">by {{ service.company.user.username }}</p>
+              <p class="service-card-price">€{{ service.price_hour }}<span>/hour</span></p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <span class="empty-state-icon">🧰</span>
+        <p>No services yet — be the first company to add one!</p>
+        <a class="btn btn-primary" href="{% url 'register' %}">Get started</a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

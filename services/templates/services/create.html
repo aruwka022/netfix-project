@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block title %}Create Service{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <h1 class="page-title">Create a New Service</h1>
+    <p class="page-subtitle">Only services in your company's field of work can be created.</p>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% include 'main/_form_fields.html' %}
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Create Service</button>
+    </form>
+  </div>
+{% endblock %}

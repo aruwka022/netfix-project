@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% block title %}Edit {{ service.name }}{% endblock %}
+
+{% block content %}
+  <div class="form-card">
+    <h1 class="page-title">Edit Service</h1>
+    <p class="page-subtitle">Update the details for "{{ service.name }}".</p>
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% include 'main/_form_fields.html' %}
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Save Changes</button>
+    </form>
+    <p class="page-subtitle"><a href="{% url 'index' service.id %}">Cancel and go back</a></p>
+  </div>
+{% endblock %}

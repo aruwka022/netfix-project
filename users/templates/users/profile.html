@@ -1,0 +1,123 @@
+{% extends 'main/base.html' %}
+{% load service_extras %}
+{% block title %}{{ profile_user.username }}{% endblock %}
+
+{% block content %}
+  <div class="profile-header">
+    <div class="profile-avatar">{% if profile_user.is_company %}🏢{% else %}🙋{% endif %}</div>
+    <div class="profile-info">
+      <h1>{{ profile_user.username }}</h1>
+      <p class="profile-email">{{ profile_user.email }}</p>
+      {% if profile_user.is_customer %}
+        <span class="pill">Customer · {{ user_age }} y/o</span>
+      {% else %}
+        <span class="pill pill-{{ company.field|field_slug }}">{{ company.field|field_icon }} {{ company.field }} Company</span>
+        <span class="pill">⭐ {{ company.rating }}/5</span>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if profile_user.is_customer %}
+    <section class="section">
+      <h2 class="section-title">Previously Requested Services</h2>
+      {% if requests %}
+        <div class="requests-list">
+          {% for r in requests %}
+            <div class="request-row">
+              <span class="request-icon">{{ r.service.field|field_icon }}</span>
+              <div class="request-main">
+                <a href="{% url 'index' r.service.id %}">{{ r.service.name }}</a>
+                <span class="pill pill-{{ r.service.field|field_slug }}">{{ r.service.field }}</span>
+              </div>
+              <div class="request-meta">
+                <span>€{{ r.cost }}</span>
+                <span>{{ r.request_date|date:"N j, Y" }}</span>
+                <span>by <a href="{% url 'company_profile' r.service.company.user.username %}">{{ r.service.company.user.username }}</a></span>
+              </div>
+              <div class="request-rating">
+                {% if r.rating %}
+                  <span class="stars-readonly" title="You rated {{ r.rating }}/5">{{ r.rating|stars }}</span>
+                {% else %}
+                  <form method="POST" action="{% url 'rate_service' r.id %}" class="star-rating-form">
+                    {% csrf_token %}
+                    <fieldset class="star-rating">
+                      <input type="radio" id="star5-{{ r.id }}" name="rating" value="5"><label for="star5-{{ r.id }}" title="5 stars">★</label>
+                      <input type="radio" id="star4-{{ r.id }}" name="rating" value="4"><label for="star4-{{ r.id }}" title="4 stars">★</label>
+                      <input type="radio" id="star3-{{ r.id }}" name="rating" value="3"><label for="star3-{{ r.id }}" title="3 stars">★</label>
+                      <input type="radio" id="star2-{{ r.id }}" name="rating" value="2"><label for="star2-{{ r.id }}" title="2 stars">★</label>
+                      <input type="radio" id="star1-{{ r.id }}" name="rating" value="1"><label for="star1-{{ r.id }}" title="1 star">★</label>
+                    </fieldset>
+                    <button type="submit" class="btn btn-ghost btn-sm">Rate</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <p>No services requested yet.</p>
+          <a class="btn btn-primary" href="{% url 'services_list' %}">Browse services</a>
+        </div>
+      {% endif %}
+    </section>
+  {% else %}
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Available Services</h2>
+        {% if request.user == profile_user %}
+          <a class="btn btn-primary" href="{% url 'services_create' %}">+ Create Service</a>
+        {% endif %}
+      </div>
+      {% if services %}
+        <div class="card-grid">
+          {% for service in services %}
+            <a class="service-card" href="{% url 'index' service.id %}">
+              <div class="service-card-banner field-{{ service.field|field_slug }}">
+                <span class="service-card-icon">{{ service.field|field_icon }}</span>
+              </div>
+              <div class="service-card-body">
+                <span class="pill pill-{{ service.field|field_slug }}">{{ service.field }}</span>
+                <h3>{{ service.name }}</h3>
+                <p class="service-card-price">€{{ service.price_hour }}<span>/hour</span></p>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <p>No services listed yet.</p>
+        </div>
+      {% endif %}
+    </section>
+
+    {% if request.user == profile_user %}
+      <section class="section">
+        <h2 class="section-title">Requests for Your Services</h2>
+        {% if incoming_requests %}
+          <div class="requests-list">
+            {% for r in incoming_requests %}
+              <div class="request-row">
+                <span class="request-icon">{{ r.service.field|field_icon }}</span>
+                <div class="request-main">
+                  <a href="{% url 'index' r.service.id %}">{{ r.service.name }}</a>
+                  <span class="pill pill-{{ r.service.field|field_slug }}">{{ r.service.field }}</span>
+                </div>
+                <div class="request-meta">
+                  <span>from {{ r.customer.user.username }}</span>
+                  <span>{{ r.address }}</span>
+                  <span>€{{ r.cost }}</span>
+                  <span>{{ r.request_date|date:"N j, Y" }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <p>No one has requested your services yet.</p>
+          </div>
+        {% endif %}
+      </section>
+    {% endif %}
+  {% endif %}
+{% endblock %}

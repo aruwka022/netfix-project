@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+  <div class="choice-page">
+    <h1 class="page-title">Join NetFix</h1>
+    <p class="choice_text">Are you looking for help around the house, or offering it?</p>
+
+    <div class="choice-grid">
+      <a class="choice-card" href="{% url 'register_company' %}">
+        <span class="choice-card-icon">🏢</span>
+        <h3>I'm a Company</h3>
+        <p>List your services and get discovered by customers near you.</p>
+      </a>
+
+      <a class="choice-card" href="{% url 'register_customer' %}">
+        <span class="choice-card-icon">🙋</span>
+        <h3>I'm a Customer</h3>
+        <p>Book trusted companies for any job around your home.</p>
+      </a>
+    </div>
+
+    <p class="page-subtitle">Already have an account? <a href="{% url 'login_user' %}">Log in</a></p>
+  </div>
+{% endblock %}

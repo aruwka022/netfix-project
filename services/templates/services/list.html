@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% load service_extras %}
+{% block title %}All Services{% endblock %}
+
+{% block content %}
+  <div class="section-header">
+    <h1 class="page-title">All Services</h1>
+    {% if request.user.is_authenticated and request.user.is_company %}
+      <a class="btn btn-primary" href="{% url 'services_create' %}">+ Create Service</a>
+    {% endif %}
+  </div>
+  <p class="page-subtitle">Browse every service on NetFix.</p>
+
+  {% include 'services/_search_sort_bar.html' with q=q sort=sort %}
+
+  {% include 'services/_service_grid.html' with page_obj=page_obj extra_qs=extra_qs q=q %}
+{% endblock %}

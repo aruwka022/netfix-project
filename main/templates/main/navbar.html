@@ -1,0 +1,43 @@
+{% load service_extras %}
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="{% url 'main:home' %}"><span class="brand-mark">N</span>Net<span class="accent">Fix</span></a>
+
+    <ul class="nav-links">
+      <li><a href="{% url 'main:home' %}">Home</a></li>
+      <li class="has-dropdown">
+        <a href="{% url 'services_list' %}">Services <span class="caret">▾</span></a>
+        <div class="dropdown-panel">
+          <a href="{% url 'services_field' 'air-conditioner' %}"><span>{{ "Air Conditioner"|field_icon }}</span> Air Conditioner</a>
+          <a href="{% url 'services_field' 'carpentry' %}"><span>{{ "Carpentry"|field_icon }}</span> Carpentry</a>
+          <a href="{% url 'services_field' 'electricity' %}"><span>{{ "Electricity"|field_icon }}</span> Electricity</a>
+          <a href="{% url 'services_field' 'gardening' %}"><span>{{ "Gardening"|field_icon }}</span> Gardening</a>
+          <a href="{% url 'services_field' 'home-machines' %}"><span>{{ "Home Machines"|field_icon }}</span> Home Machines</a>
+          <a href="{% url 'services_field' 'housekeeping' %}"><span>{{ "Housekeeping"|field_icon }}</span> Housekeeping</a>
+          <a href="{% url 'services_field' 'interior-design' %}"><span>{{ "Interior Design"|field_icon }}</span> Interior Design</a>
+          <a href="{% url 'services_field' 'locks' %}"><span>{{ "Locks"|field_icon }}</span> Locks</a>
+          <a href="{% url 'services_field' 'painting' %}"><span>{{ "Painting"|field_icon }}</span> Painting</a>
+          <a href="{% url 'services_field' 'plumbing' %}"><span>{{ "Plumbing"|field_icon }}</span> Plumbing</a>
+          <a href="{% url 'services_field' 'water-heaters' %}"><span>{{ "Water Heaters"|field_icon }}</span> Water Heaters</a>
+        </div>
+      </li>
+      {% if request.user.is_authenticated and request.user.is_company %}
+        <li><a href="{% url 'services_create' %}" class="nav-cta-ghost">+ Create Service</a></li>
+      {% endif %}
+    </ul>
+
+    <div class="nav-auth">
+      {% if request.user.is_authenticated %}
+        {% if request.user.is_company %}
+          <a class="nav-profile" href="{% url 'company_profile' request.user.username %}">👤 {{ request.user.username }}</a>
+        {% else %}
+          <a class="nav-profile" href="{% url 'customer_profile' request.user.username %}">👤 {{ request.user.username }}</a>
+        {% endif %}
+        <a class="btn btn-ghost" href="{% url 'main:logout' %}">Log out</a>
+      {% else %}
+        <a class="btn btn-ghost" href="{% url 'login_user' %}">Log in</a>
+        <a class="btn btn-primary" href="{% url 'register' %}">Sign up</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,9 @@
+<form method="GET" class="search-sort-bar">
+  <input type="text" name="q" value="{{ q }}" placeholder="Search by service name..." autocomplete="off">
+  <select name="sort" onchange="this.form.submit()">
+    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest first</option>
+    <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: low to high</option>
+    <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: high to low</option>
+  </select>
+  <button type="submit" class="btn btn-ghost">Search</button>
+</form>
